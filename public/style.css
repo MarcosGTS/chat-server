@@ -1,0 +1,119 @@
+* {
+    margin:  0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #0096c7;
+    font-family: sans-serif;
+
+    height: 100vh;
+}
+
+.app-structure {
+    display: flex;
+    flex-direction: column;
+
+    width: 90vw;
+    height: 90%;
+    background-color: whitesmoke;
+
+    padding: 16px;
+    border-radius: 16px;
+}
+
+.messages {
+    height: 90%;
+    overflow-y: scroll;
+}
+
+.message-box {
+    display: flex;
+    flex-direction: column;
+    
+    word-wrap: break-word;
+    background-color: #edf2f4;
+    
+    border-radius: 2rem;
+    padding: 4px 24px;
+    margin: 12px;
+}
+
+.input {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 8px;
+    margin: 16px 0px;
+}
+
+.message-box span {
+    font-size: small;
+    color: green;
+}
+
+.container {
+    position: relative;
+    width: 80%;
+}
+
+.send {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50px;
+
+    color: whitesmoke;
+    background-color: #0096c7;
+
+    background-image: url("./imgs/send_white.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+
+    transition: 30ms ease-in;
+}
+
+.send:hover {
+    transform: scale(1.1);
+}
+
+.send:active {
+    filter: brightness(0.9);
+    transform: scale(0.9);
+}
+.app-structure input {
+    height: 32px;
+    padding: 8px 16px;
+
+    border: 2px solid gray;
+    border-radius: 16px; 
+    width: 100%;
+}
+
+#message + label{
+    display: none;
+}
+
+#message:placeholder-shown + label{
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    color: gray;
+}
+
+@media screen and (min-width: 600px ) {
+    .app-structure {
+        max-width: 400px;
+    }
+}
