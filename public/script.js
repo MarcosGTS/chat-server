@@ -1,9 +1,12 @@
 const messages = document.querySelector(".messages");
 const sendBtn = document.querySelector(".send");
 const joinBtn = document.querySelector(".join");
+const messageInput = document.querySelector("#message");
 
 const chatState = [
-    {sender: "marcos", msg: "Hello World"}
+    {sender: "marcos", msg: "Hello Worldasdfasdfasdfasdfasdfasdfasdfasdfasdfasdasdfasdfasdfasdfasdfasdff"},
+    {sender: "marcos", msg: "Hello World"},
+    {sender: "marcos", msg: "Hello World"},
 ];
 
 //render chatState msgs sender -> message
@@ -26,7 +29,6 @@ function createMessage(pkg) {
 
     //Assing classes
     container.classList.add("message-box");
-    msgSender.classList.add("sender");
 
     //Adding message content
     msgSender.textContent = sender;
@@ -38,6 +40,19 @@ function createMessage(pkg) {
     
     messages.appendChild(container);
 }
-//add new messages to structure
+
+//Add new messages to structure
+function sendMessage(pkg) {
+    chatState.push(pkg);
+}
+
+sendBtn.addEventListener("click", () => {
+    const msg = messageInput.value;
+
+    sendMessage({sender:"marcos", msg});
+    messageInput.value = "";
+
+    renderChat(chatState);
+})
 
 renderChat(chatState);

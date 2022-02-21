@@ -31,19 +31,26 @@ body {
 
 .messages {
     height: 90%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .message-box {
     display: flex;
     flex-direction: column;
     
+    max-width: fit-content;
+    
     word-wrap: break-word;
     background-color: #edf2f4;
-    
+   
     border-radius: 2rem;
     padding: 4px 24px;
     margin: 12px;
+}
+
+.message-box span {
+    font-size: small;
+    color: green;
 }
 
 .input {
@@ -54,11 +61,6 @@ body {
 
     padding: 0 8px;
     margin: 16px 0px;
-}
-
-.message-box span {
-    font-size: small;
-    color: green;
 }
 
 .container {
@@ -91,6 +93,7 @@ body {
     filter: brightness(0.9);
     transform: scale(0.9);
 }
+
 .app-structure input {
     height: 32px;
     padding: 8px 16px;
