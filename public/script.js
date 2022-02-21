@@ -3,11 +3,14 @@ const sendBtn = document.querySelector(".send");
 const joinBtn = document.querySelector(".join");
 const messageInput = document.querySelector("#message");
 
-const chatState = [
-    {sender: "marcos", msg: "Hello Worldasdfasdfasdfasdfasdfasdfasdfasdfasdfasdasdfasdfasdfasdfasdfasdff"},
-    {sender: "marcos", msg: "Hello World"},
-    {sender: "marcos", msg: "Hello World"},
-];
+const chatState = [];
+
+const socket = io();
+
+//updating chatState
+socket.on("update-chat", pkg => {
+    renderChat(pkg);
+})
 
 //render chatState msgs sender -> message
 function renderChat(chat) {
@@ -43,7 +46,7 @@ function createMessage(pkg) {
 
 //Add new messages to structure
 function sendMessage(pkg) {
-    chatState.push(pkg);
+    socket.emit("user-message", pkg);
 }
 
 sendBtn.addEventListener("click", () => {
@@ -51,8 +54,4 @@ sendBtn.addEventListener("click", () => {
 
     sendMessage({sender:"marcos", msg});
     messageInput.value = "";
-
-    renderChat(chatState);
 })
-
-renderChat(chatState);
