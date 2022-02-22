@@ -14,19 +14,20 @@ socket.on("update-chat", pkg => {
 })
 
 //modal [Pop Up]
-socket.on("establish-conection", () => {
-    function modalSetup(){
-        const modalcontainer = document.querySelector(".modal-container");
-        const confirmBtn = document.querySelector("#confirm");
+socket.on("connect", () => {
     
-        confirmBtn.addEventListener("click", () => {
-            const nameValue = document.querySelector("#name").value;
-            if (!nameValue) return;
-            
-            userName = nameValue;
-            modalcontainer.classList.add("hidde");
-        })
-    }
+    //Setup Login screen
+    const modalcontainer = document.querySelector(".modal-container");
+    const confirmBtn = document.querySelector("#confirm");
+
+    confirmBtn.addEventListener("click", () => {
+        const nameValue = document.querySelector("#name").value;
+        if (!nameValue) return;
+
+        userName = nameValue;
+        modalcontainer.classList.add("hidde");
+    })
+    
 })
 
 
@@ -70,6 +71,6 @@ function sendMessage(pkg) {
 sendBtn.addEventListener("click", () => {
     const msg = messageInput.value;
 
-    sendMessage({sender:"marcos", msg});
+    sendMessage({sender:userName, msg});
     messageInput.value = "";
 })
