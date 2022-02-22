@@ -17,6 +17,52 @@ body {
     height: 100vh;
 }
 
+.modal-container {
+    background-color: rgba(0, 0, 0, 0.2);
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+
+    z-index: 2;
+}
+
+.modal-container.hidde {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;;
+    width: 80%;
+    max-width: 400px;
+    padding: 0 40px;
+
+    background-color: #edf2f4;
+}
+
+.modal > * {
+    margin: 12px;
+}
+
+.modal button {
+    background-color: #0096c7;
+    color: white;
+
+    width: fit-content;
+    padding: 10px 30px;
+    font-size: 0.9rem;
+
+    border: none;
+    border-radius: 50px;
+}
 .app-structure {
     display: flex;
     flex-direction: column;
@@ -94,7 +140,7 @@ body {
     transform: scale(0.9);
 }
 
-.app-structure input {
+input[type="text"] {
     height: 32px;
     padding: 8px 16px;
 
@@ -103,16 +149,21 @@ body {
     width: 100%;
 }
 
-#message + label{
+input[type="text"] + label{
     display: none;
 }
 
-#message:placeholder-shown + label{
+input[type="text"]:placeholder-shown + label{
     display: block;
+    color: gray;
     position: absolute;
     top: 8px;
     left: 16px;
-    color: gray;
+    
+}
+
+#message {
+    z-index: -1;
 }
 
 @media screen and (min-width: 600px ) {
