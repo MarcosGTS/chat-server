@@ -8,23 +8,57 @@ const PORT = 3000;
 
 app.use("/", express.static("./public"));
 
+let roomsCounter = 0;
+
 // chatStatus
-const chatStatus = [];
+const chatStatus = {
+    ROOMS:{
+        "public": {
+            history:[],
+            users:[]
+        }
+    },
+    USERS:{
+        "userId": {
+            name: "marcos",
+            rooms: []
+        }
+    }
+};
 
 io.on("connection", socket => {
     console.log(`user [${socket.id}] connected`);
-    io.to(socket.id).emit("update-chat", chatStatus);
+    
+    
+    const publicMgs = chatStatus.ROOMS["public"].history
+    
+    io.to(socket.id).emit("update-chat", publicMgs);
+
+    socket.on("login", userName => {
+        chatStatus.USERS[socket.id] = {
+            userName,
+            rooms:["public"],
+        }
+
+        console.log(chatStatus.USERS);
+    })
     
     socket.on("user-message", pkg => {
+        const {letter} = pkg;
+
         //cheking empty msg 
-        if (!pkg.msg) return;
-        
-        chatStatus.push(pkg);
-        io.emit("update-chat", chatStatus);
+        if (!letter.msg) return;
+
+        const room = chatStatus.ROOMS[pkg.roomId];
+
+        room.history.push(letter);
+        io.emit("update-chat", room.history);
     })
 
-    socket.on("disconnected", () => {
-        console.log(`user [${socket.id}] disconnected`)
+    socket.on("disconnect", () => {
+        delete chatStatus.USERS[socket.id];
+        console.log(chatStatus.USERS);
+        console.log(`user [${socket.id}] disconnected`);
     })
 })
 
