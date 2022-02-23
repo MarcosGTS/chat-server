@@ -16,6 +16,9 @@ io.on("connection", socket => {
     io.to(socket.id).emit("update-chat", chatStatus);
     
     socket.on("user-message", pkg => {
+        //cheking empty msg 
+        if (!pkg.msg) return;
+        
         chatStatus.push(pkg);
         io.emit("update-chat", chatStatus);
     })
