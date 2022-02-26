@@ -3,10 +3,17 @@ const sendBtn = document.querySelector(".send");
 const joinBtn = document.querySelector(".join");
 const messageInput = document.querySelector("#message");
 
-const chatState = [];
+let ROOMS = {};
+let currentRoom = "public";
 let userName = "";
 
 const socket = io();
+
+//socket.init 
+socket.on("init", rooms => {
+    ROOMS = rooms;
+    renderRooms()
+})
 
 //updating chatState
 socket.on("update-chat", pkg => {
@@ -23,6 +30,8 @@ socket.on("connect", () => {
     confirmBtn.addEventListener("click", () => {
         const nameValue = document.querySelector("#name").value;
         if (!nameValue) return;
+
+        socket.emit("login", nameValue);
 
         userName = nameValue;
         modalcontainer.classList.add("hidde");
@@ -63,6 +72,33 @@ function createMessage(pkg) {
     messages.appendChild(container);
 }
 
+//render Room 
+function renderRooms() {  
+    const roomsContainer = document.querySelector(".sidebar-nav");
+    roomsContainer.innerHTML = "";
+
+    for (let room in ROOMS) {
+        const newRoomNode = createRoomNode(room);
+        roomsContainer.appendChild(newRoomNode);
+    }
+        
+}
+
+function createRoomNode(roomId) {
+    
+    const listItem = document.createElement("li");
+    listItem.classList.add("nav-item");
+    listItem.textContent = roomId;
+
+    listItem.addEventListener("click", () => {
+        currentRoom = roomId;
+        socket.emit("update-room", roomId);
+        console.log(roomId);
+    })
+
+    return listItem;
+}
+
 //Add new messages to structure
 function sendMessage(pkg) {
     socket.emit("user-message", pkg);
@@ -70,7 +106,12 @@ function sendMessage(pkg) {
 
 sendBtn.addEventListener("click", () => {
     const msg = messageInput.value;
+    
+    sendMessage({
+        sender: userName,
+        msg,
+        roomId: currentRoom,
+    });
 
-    sendMessage({sender:userName, msg});
     messageInput.value = "";
 })
