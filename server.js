@@ -16,12 +16,16 @@ const chatStatus = {
         "public": {
             history:[],
             users:[]
+        },
+        "public1": {
+            history:[],
+            users:[]
         }
     },
     USERS:{
         "userId": {
             name: "marcos",
-            rooms: []
+            roomId: "public",
         }
     }
 };
@@ -29,35 +33,46 @@ const chatStatus = {
 io.on("connection", socket => {
     console.log(`user [${socket.id}] connected`);
     
-    
     const publicMgs = chatStatus.ROOMS["public"].history
     
-    io.to(socket.id).emit("update-chat", publicMgs);
+    io.to(socket.id).emit("init", chatStatus.ROOMS);
 
     socket.on("login", userName => {
         chatStatus.USERS[socket.id] = {
             userName,
-            rooms:["public"],
+            roomId:"public",
         }
 
         console.log(chatStatus.USERS);
     })
     
     socket.on("user-message", pkg => {
-        const {letter} = pkg;
+        const letter = {sender: pkg.sender, msg: pkg.msg};
 
         //cheking empty msg 
-        if (!letter.msg) return;
+        // if (!letter.msg) return;
 
         const room = chatStatus.ROOMS[pkg.roomId];
 
         room.history.push(letter);
-        io.emit("update-chat", room.history);
+       
+        const { USERS } = chatStatus;
+
+        for (let userId in USERS) {
+            let { roomId } = USERS[userId];
+
+            if (roomId != pkg.roomId) continue;
+            io.to(userId).emit("update-chat", room.history);
+        }
+        
+    })
+
+    socket.on("update-room", roomId => {
+        chatStatus.USERS[socket.id].roomId = roomId;
     })
 
     socket.on("disconnect", () => {
         delete chatStatus.USERS[socket.id];
-        console.log(chatStatus.USERS);
         console.log(`user [${socket.id}] disconnected`);
     })
 })
